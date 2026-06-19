@@ -17,11 +17,12 @@ public class CharacterControl : MonoBehaviour
 
     // Tự động lưu khoảng cách bạn đã kéo tay ngoài Scene
     private Vector3 cameraOffset;
+    private Animator anim;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        
+        anim = GetComponentInChildren<Animator>();
         // Khóa con trỏ chuột vào giữa màn hình game
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -73,6 +74,14 @@ public class CharacterControl : MonoBehaviour
         if (controller != null)
         {
             controller.SimpleMove(moveDirection);
+        }
+        if (anim != null)
+        {
+            // Tính toán độ lớn của lệnh di chuyển (bằng 0 nếu đứng im, tiến gần bằng 1 nếu chạy)
+            float currentMovementSpeed = new Vector2(moveX, moveZ).sqrMagnitude;
+            
+            // Truyền giá trị vào biến "Speed" trong Animator để kích hoạt trạng thái chạy
+            anim.SetFloat("Speed", currentMovementSpeed);
         }
     }
 }
